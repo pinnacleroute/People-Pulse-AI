@@ -1,0 +1,1973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PeoplePulse AI — Workforce Intelligence Platform</title>
+<style>
+/* ===== FONTS ===== */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+
+/* ===== RESET & VARIABLES ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --primary: #4F46E5;
+  --primary-light: #6366F1;
+  --primary-dark: #3730A3;
+  --primary-bg: #EEF2FF;
+  --secondary: #7C3AED;
+  --teal: #0D9488;
+  --teal-bg: #F0FDFA;
+  --bg: #F5F6FA;
+  --surface: #FFFFFF;
+  --surface-alt: #F9FAFB;
+  --border: #E5E7EB;
+  --border-light: #F3F4F6;
+  --text: #111827;
+  --text-secondary: #6B7280;
+  --text-muted: #9CA3AF;
+  --success: #059669;
+  --success-bg: #ECFDF5;
+  --warning: #D97706;
+  --warning-bg: #FFFBEB;
+  --danger: #DC2626;
+  --danger-bg: #FEF2F2;
+  --medium: #F59E0B;
+  --medium-bg: #FFFBEB;
+  --sidebar-w: 240px;
+  --header-h: 60px;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-lg: 0 10px 30px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.06);
+  --font: 'Plus Jakarta Sans', sans-serif;
+  --mono: 'DM Mono', monospace;
+  --transition: all 0.2s ease;
+}
+
+html { font-size: 14px; }
+body { font-family: var(--font); background: var(--bg); color: var(--text); display: flex; min-height: 100vh; overflow-x: hidden; }
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+/* ===== SIDEBAR ===== */
+#sidebar {
+  width: var(--sidebar-w);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; left: 0;
+  height: 100vh;
+  z-index: 100;
+  transition: transform 0.3s ease;
+  overflow-y: auto;
+}
+
+.sidebar-logo {
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-mark {
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: #fff; font-weight: 800;
+  flex-shrink: 0;
+}
+.logo-text { display: flex; flex-direction: column; }
+.logo-name { font-size: 13.5px; font-weight: 800; color: var(--text); letter-spacing: -0.3px; line-height: 1.2; }
+.logo-tag { font-size: 10px; color: var(--text-muted); font-weight: 500; }
+
+.nav-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 16px 20px 6px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 20px;
+  cursor: pointer;
+  border-radius: 0;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: var(--transition);
+  position: relative;
+  text-decoration: none;
+}
+.nav-item:hover { background: var(--surface-alt); color: var(--text); }
+.nav-item.active {
+  background: var(--primary-bg);
+  color: var(--primary);
+  font-weight: 600;
+}
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 4px; bottom: 4px;
+  width: 3px;
+  background: var(--primary);
+  border-radius: 0 3px 3px 0;
+}
+.nav-icon { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
+.nav-badge {
+  margin-left: auto;
+  background: var(--danger);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 99px;
+  min-width: 18px;
+  text-align: center;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 14px 16px;
+  border-top: 1px solid var(--border-light);
+}
+.user-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.user-card:hover { background: var(--surface-alt); }
+.user-avatar {
+  width: 32px; height: 32px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: #fff;
+  flex-shrink: 0;
+}
+.user-info { flex: 1; min-width: 0; }
+.user-name { font-size: 12.5px; font-weight: 600; color: var(--text); }
+.user-role { font-size: 11px; color: var(--text-muted); }
+
+/* ===== MAIN LAYOUT ===== */
+#main-wrapper {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ===== HEADER ===== */
+#header {
+  height: var(--header-h);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+#page-title { font-size: 15px; font-weight: 700; color: var(--text); flex-shrink: 0; }
+
+.search-wrap {
+  flex: 1;
+  max-width: 380px;
+  position: relative;
+}
+.search-wrap input {
+  width: 100%;
+  padding: 7px 12px 7px 34px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--text);
+  background: var(--surface-alt);
+  outline: none;
+  transition: var(--transition);
+}
+.search-wrap input:focus { border-color: var(--primary); background: #fff; }
+.search-wrap .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--text-muted); pointer-events: none; }
+
+.header-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+
+.company-pill {
+  background: var(--primary-bg);
+  color: var(--primary);
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 99px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.icon-btn {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  background: var(--surface-alt);
+  border: 1.5px solid var(--border);
+  font-size: 15px;
+  color: var(--text-secondary);
+  transition: var(--transition);
+  position: relative;
+}
+.icon-btn:hover { background: var(--primary-bg); color: var(--primary); border-color: var(--primary); }
+.notif-dot {
+  position: absolute;
+  top: 3px; right: 3px;
+  width: 7px; height: 7px;
+  background: var(--danger);
+  border-radius: 50%;
+  border: 1.5px solid var(--surface);
+}
+
+#menu-toggle { display: none; }
+
+/* ===== CONTENT ===== */
+#content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.section { display: none; }
+.section.active { display: block; }
+
+/* ===== SECTION HEADER ===== */
+.section-header {
+  margin-bottom: 20px;
+}
+.section-header h2 {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.4px;
+}
+.section-header p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 3px;
+}
+
+/* ===== GRID HELPERS ===== */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+
+/* ===== CARDS ===== */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.2s ease;
+}
+.card:hover { box-shadow: var(--shadow-md); }
+.card-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+/* ===== KPI CARD ===== */
+.kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.kpi-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.kpi-icon {
+  width: 36px; height: 36px;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px;
+  margin-bottom: 4px;
+}
+.kpi-value {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+.kpi-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+.kpi-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ===== BADGES ===== */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 99px;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+.badge-success { background: var(--success-bg); color: var(--success); }
+.badge-warning { background: var(--warning-bg); color: var(--warning); }
+.badge-danger { background: var(--danger-bg); color: var(--danger); }
+.badge-info { background: var(--primary-bg); color: var(--primary); }
+.badge-neutral { background: var(--surface-alt); color: var(--text-secondary); border: 1px solid var(--border); }
+.badge-teal { background: var(--teal-bg); color: var(--teal); }
+
+/* ===== PROGRESS BAR ===== */
+.progress-wrap { display: flex; flex-direction: column; gap: 4px; }
+.progress-header { display: flex; justify-content: space-between; align-items: center; }
+.progress-label { font-size: 13px; font-weight: 500; color: var(--text); }
+.progress-value { font-size: 12px; font-weight: 700; color: var(--text); }
+.progress-bar {
+  height: 6px;
+  background: var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-light));
+  transition: width 1s ease;
+}
+.progress-fill.green { background: linear-gradient(90deg, var(--success), #34D399); }
+.progress-fill.amber { background: linear-gradient(90deg, var(--warning), #FCD34D); }
+.progress-fill.red { background: linear-gradient(90deg, var(--danger), #F87171); }
+.progress-fill.teal { background: linear-gradient(90deg, var(--teal), #2DD4BF); }
+
+/* ===== AI INSIGHT CARD ===== */
+.ai-card {
+  background: linear-gradient(135deg, #EEF2FF 0%, #F5F3FF 100%);
+  border: 1.5px solid #C7D2FE;
+  border-radius: var(--radius);
+  padding: 16px 20px;
+}
+.ai-card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.ai-chip {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 99px;
+  letter-spacing: 0.5px;
+}
+.ai-card p { font-size: 13.5px; color: var(--text); line-height: 1.6; }
+
+/* ===== ACTION ITEMS ===== */
+.action-list { display: flex; flex-direction: column; gap: 8px; }
+.action-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--text);
+}
+.action-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--warning);
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+.action-dot.red { background: var(--danger); }
+.action-dot.green { background: var(--success); }
+.action-dot.blue { background: var(--primary); }
+
+/* ===== TABLE ===== */
+.table-wrap {
+  overflow-x: auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+thead {
+  background: var(--surface-alt);
+  border-bottom: 1px solid var(--border);
+}
+th {
+  padding: 11px 14px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+}
+td {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border-light);
+  vertical-align: middle;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--surface-alt); }
+.employee-cell { display: flex; align-items: center; gap: 10px; }
+.emp-avatar {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: #fff;
+  flex-shrink: 0;
+}
+.emp-name { font-weight: 600; font-size: 13px; }
+.emp-role { font-size: 11px; color: var(--text-muted); }
+
+/* ===== BUTTONS ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+  outline: none;
+  white-space: nowrap;
+}
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-dark); box-shadow: 0 4px 12px rgba(79,70,229,0.35); }
+.btn-outline {
+  background: transparent;
+  color: var(--primary);
+  border: 1.5px solid var(--primary);
+}
+.btn-outline:hover { background: var(--primary-bg); }
+.btn-sm { padding: 5px 11px; font-size: 12px; border-radius: 6px; }
+.btn-ghost {
+  background: var(--surface-alt);
+  color: var(--text);
+  border: 1.5px solid var(--border);
+}
+.btn-ghost:hover { background: var(--border-light); }
+
+/* ===== FILTERS ROW ===== */
+.filters-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.filter-input, .filter-select {
+  padding: 7px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--text);
+  background: var(--surface);
+  outline: none;
+  transition: var(--transition);
+}
+.filter-input { flex: 1; min-width: 200px; }
+.filter-input:focus, .filter-select:focus { border-color: var(--primary); }
+
+/* ===== FORM ===== */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group.full { grid-column: 1 / -1; }
+.form-label { font-size: 12.5px; font-weight: 600; color: var(--text); }
+.form-input, .form-textarea, .form-select {
+  padding: 9px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--text);
+  background: var(--surface);
+  outline: none;
+  transition: var(--transition);
+  width: 100%;
+}
+.form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
+.form-textarea { resize: vertical; min-height: 70px; }
+
+.radio-group { display: flex; gap: 8px; flex-wrap: wrap; }
+.radio-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: var(--transition);
+}
+.radio-btn input { display: none; }
+.radio-btn.selected { background: var(--primary-bg); border-color: var(--primary); color: var(--primary); }
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--surface);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: modalIn 0.22s ease;
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.modal-header {
+  padding: 20px 22px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-title { font-size: 16px; font-weight: 800; color: var(--text); }
+.modal-close {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 15px;
+  color: var(--text-secondary);
+  transition: var(--transition);
+}
+.modal-close:hover { background: var(--danger-bg); color: var(--danger); }
+.modal-body { padding: 20px 22px; }
+
+/* ===== TOAST ===== */
+#toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  background: var(--text);
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transform: translateY(60px);
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+#toast.show { transform: translateY(0); opacity: 1; }
+
+/* ===== AVATAR COLORS ===== */
+.av-indigo { background: var(--primary); }
+.av-purple { background: #7C3AED; }
+.av-teal { background: var(--teal); }
+.av-green { background: var(--success); }
+.av-orange { background: #EA580C; }
+.av-pink { background: #DB2777; }
+.av-blue { background: #2563EB; }
+.av-rose { background: #E11D48; }
+.av-amber { background: var(--warning); }
+.av-cyan { background: #0891B2; }
+
+/* ===== UPDATE CARDS ===== */
+.update-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.update-card-header { display: flex; align-items: center; justify-content: space-between; }
+.update-emp { display: flex; align-items: center; gap: 8px; }
+.update-meta { font-size: 11px; color: var(--text-muted); }
+.update-row { display: flex; flex-direction: column; gap: 2px; }
+.update-row-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px; }
+.update-row-val { font-size: 13px; color: var(--text); }
+.update-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+
+/* ===== BAR CHART ===== */
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  height: 140px;
+  padding: 0 4px;
+}
+.bar-col { display: flex; flex-direction: column; align-items: center; gap: 5px; flex: 1; }
+.bar-fill {
+  width: 100%;
+  border-radius: 5px 5px 0 0;
+  background: linear-gradient(180deg, var(--primary-light), var(--primary));
+  transition: height 1s ease;
+  min-height: 4px;
+  position: relative;
+}
+.bar-fill:hover { background: linear-gradient(180deg, var(--secondary), var(--primary)); }
+.bar-pct { font-size: 10px; font-weight: 700; color: var(--text-secondary); position: absolute; top: -18px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+.bar-label { font-size: 11px; font-weight: 500; color: var(--text-muted); text-align: center; }
+
+/* ===== RISK CARD ===== */
+.risk-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+}
+.risk-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; }
+.risk-name { font-size: 14.5px; font-weight: 700; color: var(--text); }
+.risk-role { font-size: 12px; color: var(--text-secondary); margin-top: 1px; }
+.risk-signals { margin-bottom: 12px; }
+.risk-signal {
+  display: flex;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--text);
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border-light);
+  align-items: flex-start;
+}
+.risk-signal:last-child { border-bottom: none; }
+.signal-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--warning); margin-top: 5px; flex-shrink: 0; }
+.signal-dot.red { background: var(--danger); }
+.risk-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+
+/* ===== TICKET COLORS ===== */
+.status-open { background: var(--primary-bg); color: var(--primary); }
+.status-inprogress { background: var(--warning-bg); color: var(--warning); }
+.status-resolved { background: var(--success-bg); color: var(--success); }
+.status-overdue { background: var(--danger-bg); color: var(--danger); }
+
+/* ===== SKILL CARD ===== */
+.skill-gap-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.skill-icon {
+  width: 42px; height: 42px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.skill-info { flex: 1; }
+.skill-name { font-size: 13.5px; font-weight: 600; color: var(--text); }
+.skill-count { font-size: 12px; color: var(--text-secondary); margin-top: 1px; }
+
+/* ===== REPORT OUTPUT ===== */
+.report-output {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 26px;
+  box-shadow: var(--shadow);
+  margin-top: 16px;
+  display: none;
+}
+.report-output.show { display: block; animation: fadeIn 0.35s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.report-title { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 6px; }
+.report-subtitle { font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; }
+.report-body p { font-size: 13.5px; color: var(--text); line-height: 1.7; margin-bottom: 12px; }
+.report-section-title { font-size: 14px; font-weight: 700; color: var(--text); margin: 16px 0 8px; border-left: 3px solid var(--primary); padding-left: 10px; }
+.report-list { display: flex; flex-direction: column; gap: 6px; list-style: none; }
+.report-list li {
+  display: flex; gap: 8px; align-items: flex-start;
+  font-size: 13px; color: var(--text); padding: 6px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+.report-list li:last-child { border-bottom: none; }
+
+/* ===== EXEC CARD ===== */
+.exec-metric {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+.exec-value { font-size: 32px; font-weight: 800; color: var(--text); letter-spacing: -1px; }
+.exec-label { font-size: 12px; color: var(--text-secondary); margin-top: 4px; font-weight: 500; }
+.exec-trend { font-size: 12px; font-weight: 600; margin-top: 6px; }
+.trend-up { color: var(--success); }
+.trend-down { color: var(--danger); }
+
+/* ===== SETTINGS ===== */
+.settings-section { margin-bottom: 24px; }
+.settings-section-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+.toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-light); }
+.toggle-row:last-child { border-bottom: none; }
+.toggle-label { font-size: 13px; font-weight: 500; color: var(--text); }
+.toggle-sub { font-size: 11.5px; color: var(--text-muted); margin-top: 1px; }
+.toggle-switch {
+  width: 40px; height: 22px;
+  background: var(--border);
+  border-radius: 99px;
+  cursor: pointer;
+  position: relative;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+.toggle-switch.on { background: var(--primary); }
+.toggle-switch::after {
+  content: '';
+  width: 16px; height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px; left: 3px;
+  transition: var(--transition);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.toggle-switch.on::after { left: 21px; }
+
+/* ===== DIVIDER ===== */
+.divider { height: 1px; background: var(--border); margin: 18px 0; }
+.gap-16 { gap: 16px; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  #sidebar { transform: translateX(-100%); }
+  #sidebar.open { transform: translateX(0); }
+  #main-wrapper { margin-left: 0; }
+  #menu-toggle { display: flex; }
+  .grid-4 { grid-template-columns: 1fr 1fr; }
+  .grid-5 { grid-template-columns: 1fr 1fr; }
+  .grid-3 { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+  .grid-2, .grid-3, .grid-4, .grid-5 { grid-template-columns: 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+  #content { padding: 16px; }
+  #header { padding: 0 14px; }
+  .search-wrap { display: none; }
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 99;
+}
+.sidebar-overlay.open { display: block; }
+</style>
+</head>
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">PP</div>
+    <div class="logo-text">
+      <span class="logo-name">PeoplePulse AI</span>
+      <span class="logo-tag">Workforce Intelligence</span>
+    </div>
+  </div>
+
+  <span class="nav-section-label">Overview</span>
+  <div class="nav-item active" onclick="showSection('dashboard', this)">
+    <span class="nav-icon">🏠</span> Dashboard
+  </div>
+  <div class="nav-item" onclick="showSection('employees', this)">
+    <span class="nav-icon">👥</span> Employees
+  </div>
+  <div class="nav-item" onclick="showSection('dailyupdates', this)">
+    <span class="nav-icon">📝</span> Daily Updates
+    <span class="nav-badge">5</span>
+  </div>
+
+  <span class="nav-section-label">Analytics</span>
+  <div class="nav-item" onclick="showSection('productivity', this)">
+    <span class="nav-icon">📊</span> Team Productivity
+  </div>
+  <div class="nav-item" onclick="showSection('engagement', this)">
+    <span class="nav-icon">💬</span> Engagement
+  </div>
+  <div class="nav-item" onclick="showSection('attrition', this)">
+    <span class="nav-icon">⚠️</span> Attrition Risk
+    <span class="nav-badge">9</span>
+  </div>
+
+  <span class="nav-section-label">HR Operations</span>
+  <div class="nav-item" onclick="showSection('hrrequests', this)">
+    <span class="nav-icon">🎫</span> HR Requests
+    <span class="nav-badge">23</span>
+  </div>
+  <div class="nav-item" onclick="showSection('skills', this)">
+    <span class="nav-icon">🎓</span> Skills &amp; Training
+  </div>
+
+  <span class="nav-section-label">Intelligence</span>
+  <div class="nav-item" onclick="showSection('aireports', this)">
+    <span class="nav-icon">🤖</span> AI Reports
+  </div>
+  <div class="nav-item" onclick="showSection('leadership', this)">
+    <span class="nav-icon">🔭</span> Leadership View
+  </div>
+  <div class="nav-item" onclick="showSection('settings', this)">
+    <span class="nav-icon">⚙️</span> Settings
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="user-avatar">AS</div>
+      <div class="user-info">
+        <div class="user-name">Aman Singh</div>
+        <div class="user-role">HR Admin</div>
+      </div>
+      <span style="color:var(--text-muted);font-size:16px;">⋯</span>
+    </div>
+  </div>
+</nav>
+
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- ===== MAIN WRAPPER ===== -->
+<div id="main-wrapper">
+
+  <!-- HEADER -->
+  <header id="header">
+    <button class="icon-btn" id="menu-toggle" onclick="toggleSidebar()">☰</button>
+    <span id="page-title">Dashboard</span>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="Search employees, updates, tickets..." />
+    </div>
+    <div class="header-right">
+      <div class="company-pill">🏢 Pinnacle Route Demo ▾</div>
+      <div class="icon-btn" title="Notifications">
+        🔔
+        <span class="notif-dot"></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main id="content">
+
+    <!-- ==================== DASHBOARD ==================== -->
+    <section id="sec-dashboard" class="section active">
+      <div class="section-header">
+        <h2>Good morning, Aman 👋</h2>
+        <p>Here's your workforce snapshot for today — Monday, 2 June 2025</p>
+      </div>
+
+      <!-- KPI GRID -->
+      <div class="grid-4" style="margin-bottom:16px;">
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background:#EEF2FF;">👥</div>
+          <div class="kpi-value">128</div>
+          <div class="kpi-label">Total Employees</div>
+          <div class="kpi-sub">112 active today</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background:#ECFDF5;">📈</div>
+          <div class="kpi-value">84%</div>
+          <div class="kpi-label">Productivity Score</div>
+          <div class="kpi-sub">+2% vs last week</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background:#FFFBEB;">🚧</div>
+          <div class="kpi-value">17</div>
+          <div class="kpi-label">Open Blockers</div>
+          <div class="kpi-sub">4 pending &gt;3 days</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background:#F0FDFA;">💬</div>
+          <div class="kpi-value">78%</div>
+          <div class="kpi-label">Engagement Score</div>
+          <div class="kpi-sub">-2% vs last month</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background:#FEF2F2;">❤️</div>
+          <div class="kpi-value">9</div>
+          <div class="kpi-label">Needs HR Attention</div>
+          <div class="kpi-sub">Attrition risk signals</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background:#EEF2FF;">🎫</div>
+          <div class="kpi-value">23</div>
+          <div class="kpi-label">Pending HR Requests</div>
+          <div class="kpi-sub">3 overdue</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background:#FFFBEB;">🎓</div>
+          <div class="kpi-value">31</div>
+          <div class="kpi-label">Training Gaps</div>
+          <div class="kpi-sub">Across 5 skill areas</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background:#F0FDFA;">✅</div>
+          <div class="kpi-value">112</div>
+          <div class="kpi-label">Active Today</div>
+          <div class="kpi-sub">16 not yet checked in</div>
+        </div>
+      </div>
+
+      <!-- AI INSIGHT + ACTION ITEMS -->
+      <div class="grid-2" style="margin-bottom:16px;">
+        <div class="ai-card">
+          <div class="ai-card-header">
+            <div class="ai-chip">✨ AI INSIGHT</div>
+            <span style="font-size:12px;color:var(--text-muted);">Generated just now</span>
+          </div>
+          <p>"Customer Support has the highest productivity this week at 91%, but workload pressure has increased significantly. HR should review workload distribution to prevent burnout in this team before it impacts engagement scores."</p>
+        </div>
+        <div class="card">
+          <div class="card-title">Today's HR Action Items</div>
+          <div class="action-list">
+            <div class="action-item"><span class="action-dot amber"></span>5 employees have not submitted daily updates</div>
+            <div class="action-item"><span class="action-dot red"></span>3 employees reported workload stress today</div>
+            <div class="action-item"><span class="action-dot amber"></span>4 blockers are pending manager response</div>
+            <div class="action-item"><span class="action-dot green"></span>2 high-performing employees ready for recognition</div>
+            <div class="action-item"><span class="action-dot red"></span>1 employee needs urgent HR check-in</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEPARTMENT PRODUCTIVITY -->
+      <div class="card">
+        <div class="card-title">Department Productivity — This Week</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 24px;margin-top:10px;">
+          <div class="progress-wrap"><div class="progress-header"><span class="progress-label">Engineering</span><span class="progress-value">88%</span></div><div class="progress-bar"><div class="progress-fill" style="width:88%"></div></div></div>
+          <div class="progress-wrap"><div class="progress-header"><span class="progress-label">Customer Support</span><span class="progress-value">91%</span></div><div class="progress-bar"><div class="progress-fill green" style="width:91%"></div></div></div>
+          <div class="progress-wrap"><div class="progress-header"><span class="progress-label">Sales</span><span class="progress-value">82%</span></div><div class="progress-bar"><div class="progress-fill" style="width:82%"></div></div></div>
+          <div class="progress-wrap"><div class="progress-header"><span class="progress-label">HR</span><span class="progress-value">85%</span></div><div class="progress-bar"><div class="progress-fill teal" style="width:85%"></div></div></div>
+          <div class="progress-wrap"><div class="progress-header"><span class="progress-label">Marketing</span><span class="progress-value">76%</span></div><div class="progress-bar"><div class="progress-fill amber" style="width:76%"></div></div></div>
+          <div class="progress-wrap"><div class="progress-header"><span class="progress-label">Operations</span><span class="progress-value">80%</span></div><div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== EMPLOYEES ==================== -->
+    <section id="sec-employees" class="section">
+      <div class="section-header">
+        <h2>Employee Directory</h2>
+        <p>Manage, track, and support your entire workforce in one place.</p>
+      </div>
+      <div class="filters-row">
+        <input class="filter-input" type="text" id="empSearch" placeholder="🔍  Search by name or role..." oninput="filterEmployees()" />
+        <select class="filter-select" id="deptFilter" onchange="filterEmployees()">
+          <option value="">All Departments</option>
+          <option>Design</option><option>Engineering</option><option>Sales</option>
+          <option>Customer Support</option><option>HR</option><option>Operations</option>
+          <option>Marketing</option>
+        </select>
+        <select class="filter-select" id="riskFilter" onchange="filterEmployees()">
+          <option value="">All Risk Levels</option>
+          <option>Low Risk</option><option>Medium Risk</option><option>High Risk</option>
+        </select>
+        <select class="filter-select" id="wlFilter" onchange="filterEmployees()">
+          <option value="">All Workloads</option>
+          <option>Balanced</option><option>High Workload</option><option>Heavy</option><option>Overloaded</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table id="empTable">
+          <thead>
+            <tr>
+              <th>Employee</th><th>Department</th><th>Manager</th>
+              <th>Productivity</th><th>Engagement</th><th>Workload</th><th>Support Status</th><th>Last Update</th><th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="empTbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ==================== DAILY UPDATES ==================== -->
+    <section id="sec-dailyupdates" class="section">
+      <div class="section-header">
+        <h2>Daily Updates</h2>
+        <p>Team standup updates, blockers, and workload check-ins.</p>
+      </div>
+      <div class="grid-2" style="align-items:start;">
+        <!-- FORM -->
+        <div class="card">
+          <div class="card-title" style="margin-bottom:14px;">Submit Today's Update</div>
+          <div class="form-grid">
+            <div class="form-group full">
+              <label class="form-label">Your Name</label>
+              <input class="form-input" id="upd-name" type="text" placeholder="e.g. Riya Sharma" />
+            </div>
+            <div class="form-group full">
+              <label class="form-label">✅ Completed Today</label>
+              <textarea class="form-textarea" id="upd-done" placeholder="What did you finish today?"></textarea>
+            </div>
+            <div class="form-group full">
+              <label class="form-label">🔄 Currently Working On</label>
+              <textarea class="form-textarea" id="upd-inprogress" placeholder="What are you working on?"></textarea>
+            </div>
+            <div class="form-group full">
+              <label class="form-label">🚧 Blockers (if any)</label>
+              <input class="form-input" id="upd-blocker" type="text" placeholder="Any blockers or dependencies?" />
+            </div>
+            <div class="form-group full">
+              <label class="form-label">📅 Plan for Tomorrow</label>
+              <textarea class="form-textarea" id="upd-tomorrow" placeholder="What will you work on tomorrow?"></textarea>
+            </div>
+            <div class="form-group full">
+              <label class="form-label">😊 Today's Mood</label>
+              <div class="radio-group" id="mood-group">
+                <label class="radio-btn" onclick="selectRadio(this,'mood-group')"><input type="radio" name="mood" value="Happy" />😊 Happy</label>
+                <label class="radio-btn" onclick="selectRadio(this,'mood-group')"><input type="radio" name="mood" value="Neutral" />😐 Neutral</label>
+                <label class="radio-btn" onclick="selectRadio(this,'mood-group')"><input type="radio" name="mood" value="Stressed" />😟 Stressed</label>
+                <label class="radio-btn" onclick="selectRadio(this,'mood-group')"><input type="radio" name="mood" value="Overloaded" />😩 Overloaded</label>
+              </div>
+            </div>
+            <div class="form-group full">
+              <label class="form-label">⚖️ Workload Today</label>
+              <div class="radio-group" id="wl-group">
+                <label class="radio-btn" onclick="selectRadio(this,'wl-group')"><input type="radio" name="workload" value="Light" />🟢 Light</label>
+                <label class="radio-btn" onclick="selectRadio(this,'wl-group')"><input type="radio" name="workload" value="Balanced" />🔵 Balanced</label>
+                <label class="radio-btn" onclick="selectRadio(this,'wl-group')"><input type="radio" name="workload" value="Heavy" />🟡 Heavy</label>
+                <label class="radio-btn" onclick="selectRadio(this,'wl-group')"><input type="radio" name="workload" value="Overloaded" />🔴 Overloaded</label>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:16px;">
+            <button class="btn btn-primary" onclick="submitUpdate()">Submit Update →</button>
+          </div>
+        </div>
+        <!-- UPDATE FEED -->
+        <div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+            <div style="font-size:14px;font-weight:700;color:var(--text);">Team Updates Today <span style="font-size:12px;font-weight:500;color:var(--text-muted);" id="update-count">(4 updates)</span></div>
+            <button class="btn btn-outline btn-sm" onclick="generateWeeklySummary()">✨ Generate Weekly Summary</button>
+          </div>
+          <div id="weekly-summary" style="display:none;margin-bottom:14px;" class="ai-card">
+            <div class="ai-card-header"><div class="ai-chip">✨ AI WEEKLY SUMMARY</div></div>
+            <p>"This week's updates show consistent productivity across Engineering and Customer Support. However, Operations and Sales reported higher workload pressure and recurring blockers. HR should prioritize manager follow-ups and workload balancing to maintain team wellbeing heading into next week."</p>
+          </div>
+          <div id="updates-feed" style="display:flex;flex-direction:column;gap:12px;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TEAM PRODUCTIVITY ==================== -->
+    <section id="sec-productivity" class="section">
+      <div class="section-header">
+        <h2>Team Productivity</h2>
+        <p>Manager dashboard — task completion, blockers, and workload trends.</p>
+      </div>
+      <div class="grid-5" style="margin-bottom:16px;">
+        <div class="kpi-card"><div class="kpi-icon" style="background:#ECFDF5;">✅</div><div class="kpi-value">342</div><div class="kpi-label">Completed Tasks</div></div>
+        <div class="kpi-card"><div class="kpi-icon" style="background:#FEF2F2;">⏰</div><div class="kpi-value">28</div><div class="kpi-label">Delayed Tasks</div></div>
+        <div class="kpi-card"><div class="kpi-icon" style="background:#FFFBEB;">🚧</div><div class="kpi-value">12</div><div class="kpi-label">Active Blockers</div></div>
+        <div class="kpi-card"><div class="kpi-icon" style="background:#EEF2FF;">📈</div><div class="kpi-value">84%</div><div class="kpi-label">Avg Team Score</div></div>
+        <div class="kpi-card"><div class="kpi-icon" style="background:#FEF2F2;">🔴</div><div class="kpi-value">6</div><div class="kpi-label">Overloaded Employees</div></div>
+      </div>
+      <div class="grid-2" style="align-items:start;">
+        <div class="card">
+          <div class="card-title" style="margin-bottom:18px;">7-Day Productivity Trend</div>
+          <div class="bar-chart" id="prodChart"></div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="margin-bottom:12px;">Manager Recommendations</div>
+          <div class="action-list">
+            <div class="action-item"><span class="action-dot amber"></span>Reassign 3 tasks from overloaded employees in Operations</div>
+            <div class="action-item"><span class="action-dot red"></span>Follow up on 4 unresolved blockers older than 3 days</div>
+            <div class="action-item"><span class="action-dot green"></span>Recognize top performers — Daniel Kim and Arjun Mehta</div>
+            <div class="action-item"><span class="action-dot blue"></span>Review Engineering and Operations team workload this week</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ENGAGEMENT ==================== -->
+    <section id="sec-engagement" class="section">
+      <div class="section-header">
+        <h2>Employee Engagement</h2>
+        <p>Pulse surveys, mood tracking, and engagement health signals.</p>
+      </div>
+      <div class="grid-5" style="margin-bottom:16px;">
+        <div class="kpi-card"><div class="kpi-icon" style="background:#EEF2FF;">💬</div><div class="kpi-value">78%</div><div class="kpi-label">Overall Engagement</div></div>
+        <div class="kpi-card"><div class="kpi-icon" style="background:#ECFDF5;">😊</div><div class="kpi-value">54%</div><div class="kpi-label">Happy Employees</div></div>
+        <div class="kpi-card"><div class="kpi-icon" style="background:#F5F3FF;">😐</div><div class="kpi-value">31%</div><div class="kpi-label">Neutral</div></div>
+        <div class="kpi-card"><div class="kpi-icon" style="background:#FFFBEB;">😟</div><div class="kpi-value">11%</div><div class="kpi-label">Stressed</div></div>
+        <div class="kpi-card"><div class="kpi-icon" style="background:#FEF2F2;">😩</div><div class="kpi-value">4%</div><div class="kpi-label">Overloaded</div></div>
+      </div>
+      <div class="grid-2" style="align-items:start;">
+        <div class="card">
+          <div class="card-title" style="margin-bottom:14px;">Pulse Survey Results — May 2025</div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div class="progress-wrap"><div class="progress-header"><span class="progress-label">Satisfaction with workload</span><span class="progress-value">74%</span></div><div class="progress-bar"><div class="progress-fill amber" style="width:74%"></div></div></div>
+            <div class="progress-wrap"><div class="progress-header"><span class="progress-label">Support from manager</span><span class="progress-value">81%</span></div><div class="progress-bar"><div class="progress-fill" style="width:81%"></div></div></div>
+            <div class="progress-wrap"><div class="progress-header"><span class="progress-label">Access to right tools</span><span class="progress-value">77%</span></div><div class="progress-bar"><div class="progress-fill" style="width:77%"></div></div></div>
+            <div class="progress-wrap"><div class="progress-header"><span class="progress-label">Clarity of priorities</span><span class="progress-value">69%</span></div><div class="progress-bar"><div class="progress-fill amber" style="width:69%"></div></div></div>
+            <div class="progress-wrap"><div class="progress-header"><span class="progress-label">Would recommend workplace</span><span class="progress-value">83%</span></div><div class="progress-bar"><div class="progress-fill green" style="width:83%"></div></div></div>
+          </div>
+        </div>
+        <div>
+          <div class="ai-card" style="margin-bottom:14px;">
+            <div class="ai-card-header"><div class="ai-chip">✨ AI INSIGHT</div></div>
+            <p>"Employees in Operations and Sales are reporting lower clarity around priorities. HR should coordinate with department managers to improve weekly planning communication and goal-setting practices."</p>
+          </div>
+          <div class="card">
+            <div class="card-title" style="margin-bottom:10px;">Engagement by Department</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div class="progress-wrap"><div class="progress-header"><span class="progress-label">Customer Support</span><span class="progress-value">88%</span></div><div class="progress-bar"><div class="progress-fill green" style="width:88%"></div></div></div>
+              <div class="progress-wrap"><div class="progress-header"><span class="progress-label">HR</span><span class="progress-value">83%</span></div><div class="progress-bar"><div class="progress-fill teal" style="width:83%"></div></div></div>
+              <div class="progress-wrap"><div class="progress-header"><span class="progress-label">Engineering</span><span class="progress-value">74%</span></div><div class="progress-bar"><div class="progress-fill" style="width:74%"></div></div></div>
+              <div class="progress-wrap"><div class="progress-header"><span class="progress-label">Marketing</span><span class="progress-value">76%</span></div><div class="progress-bar"><div class="progress-fill" style="width:76%"></div></div></div>
+              <div class="progress-wrap"><div class="progress-header"><span class="progress-label">Sales</span><span class="progress-value">69%</span></div><div class="progress-bar"><div class="progress-fill amber" style="width:69%"></div></div></div>
+              <div class="progress-wrap"><div class="progress-header"><span class="progress-label">Operations</span><span class="progress-value">61%</span></div><div class="progress-bar"><div class="progress-fill red" style="width:61%"></div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ATTRITION RISK ==================== -->
+    <section id="sec-attrition" class="section">
+      <div class="section-header">
+        <h2>Workforce Support &amp; Attrition Risk</h2>
+        <p>Proactively identify and support employees who may need HR attention.</p>
+      </div>
+      <div class="grid-3" style="margin-bottom:20px;">
+        <div class="kpi-card" style="border-top:3px solid var(--success);">
+          <div class="kpi-value" style="color:var(--success);">93</div>
+          <div class="kpi-label">Low Risk — All Good</div>
+          <div class="kpi-sub">Stable and engaged</div>
+        </div>
+        <div class="kpi-card" style="border-top:3px solid var(--warning);">
+          <div class="kpi-value" style="color:var(--warning);">26</div>
+          <div class="kpi-label">Attention Recommended</div>
+          <div class="kpi-sub">Some signals detected</div>
+        </div>
+        <div class="kpi-card" style="border-top:3px solid var(--danger);">
+          <div class="kpi-value" style="color:var(--danger);">9</div>
+          <div class="kpi-label">Check-in Suggested</div>
+          <div class="kpi-sub">Needs HR support</div>
+        </div>
+      </div>
+      <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:12px;">Employees Who Would Benefit from HR Support</div>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <!-- Michael Brown -->
+        <div class="risk-card">
+          <div class="risk-header">
+            <div>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <div class="emp-avatar av-orange" style="width:38px;height:38px;font-size:13px;">MB</div>
+                <div>
+                  <div class="risk-name">Michael Brown</div>
+                  <div class="risk-role">Operations Manager · Operations</div>
+                </div>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <span class="badge badge-danger">⚠ Check-in Suggested</span>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">Manager: James Carter</div>
+            </div>
+          </div>
+          <div class="risk-signals">
+            <div class="risk-signal"><span class="signal-dot red"></span>Engagement dropped from 74% to 61% over 3 weeks</div>
+            <div class="risk-signal"><span class="signal-dot red"></span>Workload marked overloaded 4 times this month</div>
+            <div class="risk-signal"><span class="signal-dot red"></span>Two unresolved blockers pending for more than 5 days</div>
+            <div class="risk-signal"><span class="signal-dot amber"></span>No manager check-in recorded in the last 21 days</div>
+          </div>
+          <div class="risk-actions">
+            <span class="badge badge-info">📅 Schedule HR Check-in</span>
+            <span class="badge badge-warning">⚖️ Review Workload</span>
+            <span class="badge badge-neutral">💼 Discuss Career Path</span>
+            <span class="badge badge-neutral">🔧 Resolve Blockers</span>
+          </div>
+        </div>
+        <!-- Sarah Wilson -->
+        <div class="risk-card">
+          <div class="risk-header">
+            <div>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <div class="emp-avatar av-blue" style="width:38px;height:38px;font-size:13px;">SW</div>
+                <div>
+                  <div class="risk-name">Sarah Wilson</div>
+                  <div class="risk-role">Sales Executive · Sales</div>
+                </div>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <span class="badge badge-warning">⚡ Attention Recommended</span>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">Manager: Emily Clark</div>
+            </div>
+          </div>
+          <div class="risk-signals">
+            <div class="risk-signal"><span class="signal-dot amber"></span>Productivity has declined by 8% over two weeks</div>
+            <div class="risk-signal"><span class="signal-dot amber"></span>Mood marked as stressed twice this week</div>
+            <div class="risk-signal"><span class="signal-dot amber"></span>Missed daily updates 3 times this month</div>
+          </div>
+          <div class="risk-actions">
+            <span class="badge badge-info">💬 Manager Follow-up</span>
+            <span class="badge badge-warning">🎯 Clarify Targets</span>
+            <span class="badge badge-neutral">🤝 Offer Support</span>
+          </div>
+        </div>
+        <!-- Carlos Rivera -->
+        <div class="risk-card">
+          <div class="risk-header">
+            <div>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <div class="emp-avatar av-cyan" style="width:38px;height:38px;font-size:13px;">CR</div>
+                <div>
+                  <div class="risk-name">Carlos Rivera</div>
+                  <div class="risk-role">Account Manager · Sales</div>
+                </div>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <span class="badge badge-warning">⚡ Attention Recommended</span>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">Manager: Emily Clark</div>
+            </div>
+          </div>
+          <div class="risk-signals">
+            <div class="risk-signal"><span class="signal-dot amber"></span>Engagement at 66% and trending downward</div>
+            <div class="risk-signal"><span class="signal-dot amber"></span>Workload marked heavy consistently for 2 weeks</div>
+            <div class="risk-signal"><span class="signal-dot amber"></span>Productivity dipped below team average this week</div>
+          </div>
+          <div class="risk-actions">
+            <span class="badge badge-info">💬 1:1 Check-in</span>
+            <span class="badge badge-warning">⚖️ Workload Review</span>
+            <span class="badge badge-neutral">🎯 Goal Alignment</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== HR REQUESTS ==================== -->
+    <section id="sec-hrrequests" class="section">
+      <div class="section-header">
+        <h2>HR Requests</h2>
+        <p>Manage employee tickets, helpdesk requests, and HR support cases.</p>
+      </div>
+      <div class="grid-4" style="margin-bottom:16px;">
+        <div class="kpi-card"><div class="kpi-value" style="color:var(--primary);">23</div><div class="kpi-label">Total Open</div></div>
+        <div class="kpi-card"><div class="kpi-value" style="color:var(--warning);">8</div><div class="kpi-label">In Progress</div></div>
+        <div class="kpi-card"><div class="kpi-value" style="color:var(--danger);">3</div><div class="kpi-label">Overdue</div></div>
+        <div class="kpi-card"><div class="kpi-value" style="color:var(--success);">89%</div><div class="kpi-label">Resolution Rate</div></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Ticket ID</th><th>Employee</th><th>Category</th><th>Priority</th><th>Status</th><th>Assigned To</th><th>Created</th><th>SLA</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code style="font-family:var(--mono);font-size:12px;color:var(--primary);">HR-1024</code></td>
+              <td><div class="employee-cell"><div class="emp-avatar av-indigo">RS</div><div><div class="emp-name">Riya Sharma</div><div class="emp-role">Design</div></div></div></td>
+              <td>Salary Slip</td><td><span class="badge badge-warning">Medium</span></td>
+              <td><span class="badge status-open">Open</span></td>
+              <td>Fatima Khan</td><td>Today, 10:30</td><td style="color:var(--warning);font-weight:600;">2 hours left</td>
+            </tr>
+            <tr>
+              <td><code style="font-family:var(--mono);font-size:12px;color:var(--primary);">HR-1025</code></td>
+              <td><div class="employee-cell"><div class="emp-avatar av-teal">DK</div><div><div class="emp-name">Daniel Kim</div><div class="emp-role">Customer Support</div></div></div></td>
+              <td>Reimbursement</td><td><span class="badge badge-neutral">Low</span></td>
+              <td><span class="badge status-inprogress">In Progress</span></td>
+              <td>HR Team</td><td>Yesterday</td><td>1 day left</td>
+            </tr>
+            <tr>
+              <td><code style="font-family:var(--mono);font-size:12px;color:var(--primary);">HR-1026</code></td>
+              <td><div class="employee-cell"><div class="emp-avatar av-orange">MB</div><div><div class="emp-name">Michael Brown</div><div class="emp-role">Operations</div></div></div></td>
+              <td>Workload Concern</td><td><span class="badge badge-danger">High</span></td>
+              <td><span class="badge status-overdue">Overdue</span></td>
+              <td>HR Manager</td><td>3 days ago</td><td style="color:var(--danger);font-weight:600;">Overdue</td>
+            </tr>
+            <tr>
+              <td><code style="font-family:var(--mono);font-size:12px;color:var(--primary);">HR-1027</code></td>
+              <td><div class="employee-cell"><div class="emp-avatar av-blue">SW</div><div><div class="emp-name">Sarah Wilson</div><div class="emp-role">Sales</div></div></div></td>
+              <td>Leave Request</td><td><span class="badge badge-warning">Medium</span></td>
+              <td><span class="badge status-resolved">Resolved</span></td>
+              <td>HR Team</td><td>2 days ago</td><td style="color:var(--success);font-weight:600;">Completed</td>
+            </tr>
+            <tr>
+              <td><code style="font-family:var(--mono);font-size:12px;color:var(--primary);">HR-1028</code></td>
+              <td><div class="employee-cell"><div class="emp-avatar av-purple">AM</div><div><div class="emp-name">Arjun Mehta</div><div class="emp-role">Engineering</div></div></div></td>
+              <td>Asset Request</td><td><span class="badge badge-warning">Medium</span></td>
+              <td><span class="badge status-inprogress">In Progress</span></td>
+              <td>IT / HR</td><td>Today, 9:00</td><td style="color:var(--warning);font-weight:600;">6 hours left</td>
+            </tr>
+            <tr>
+              <td><code style="font-family:var(--mono);font-size:12px;color:var(--primary);">HR-1029</code></td>
+              <td><div class="employee-cell"><div class="emp-avatar av-pink">AP</div><div><div class="emp-name">Aisha Patel</div><div class="emp-role">HR</div></div></div></td>
+              <td>Document Request</td><td><span class="badge badge-neutral">Low</span></td>
+              <td><span class="badge status-resolved">Resolved</span></td>
+              <td>HR Team</td><td>Yesterday</td><td style="color:var(--success);font-weight:600;">Completed</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ==================== SKILLS & TRAINING ==================== -->
+    <section id="sec-skills" class="section">
+      <div class="section-header">
+        <h2>Skills &amp; Training</h2>
+        <p>Identify skill gaps and recommend learning programs for your team.</p>
+      </div>
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;">Skill Gap Summary</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">
+        <div class="skill-gap-card"><div class="skill-icon" style="background:#FEF2F2;">🤖</div><div class="skill-info"><div class="skill-name">AI Tools &amp; Productivity</div><div class="skill-count">42 employees need training</div></div><div><div class="progress-bar" style="width:160px;"><div class="progress-fill red" style="width:33%"></div></div></div><span class="badge badge-danger">Priority</span></div>
+        <div class="skill-gap-card"><div class="skill-icon" style="background:#FFFBEB;">🛡</div><div class="skill-info"><div class="skill-name">Cybersecurity Awareness</div><div class="skill-count">64 employees need training</div></div><div><div class="progress-bar" style="width:160px;"><div class="progress-fill red" style="width:50%"></div></div></div><span class="badge badge-danger">Priority</span></div>
+        <div class="skill-gap-card"><div class="skill-icon" style="background:#EEF2FF;">📊</div><div class="skill-info"><div class="skill-name">Advanced Excel &amp; Data</div><div class="skill-count">27 employees need training</div></div><div><div class="progress-bar" style="width:160px;"><div class="progress-fill amber" style="width:21%"></div></div></div><span class="badge badge-warning">Moderate</span></div>
+        <div class="skill-gap-card"><div class="skill-icon" style="background:#F5F3FF;">👔</div><div class="skill-info"><div class="skill-name">Leadership &amp; Management</div><div class="skill-count">18 employees need training</div></div><div><div class="progress-bar" style="width:160px;"><div class="progress-fill" style="width:14%"></div></div></div><span class="badge badge-info">Planned</span></div>
+        <div class="skill-gap-card"><div class="skill-icon" style="background:#F0FDFA;">💼</div><div class="skill-info"><div class="skill-name">CRM Usage &amp; Sales Tools</div><div class="skill-count">21 employees need training</div></div><div><div class="progress-bar" style="width:160px;"><div class="progress-fill teal" style="width:16%"></div></div></div><span class="badge badge-teal">In Progress</span></div>
+      </div>
+      <div class="grid-2" style="align-items:start;">
+        <div class="card">
+          <div class="card-title" style="margin-bottom:12px;">Recommended Training Programs</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div class="action-item"><span class="action-dot blue"></span><div><div style="font-weight:600;font-size:13px;">AI Productivity for HR &amp; Managers</div><div style="font-size:11.5px;color:var(--text-muted);margin-top:1px;">Online · 4 hours · Recommended for 42 employees</div></div></div>
+            <div class="action-item"><span class="action-dot red"></span><div><div style="font-weight:600;font-size:13px;">Cybersecurity Awareness Training</div><div style="font-size:11.5px;color:var(--text-muted);margin-top:1px;">Self-paced · 2 hours · Mandatory for all</div></div></div>
+            <div class="action-item"><span class="action-dot blue"></span><div><div style="font-weight:600;font-size:13px;">Leadership Basics for New Managers</div><div style="font-size:11.5px;color:var(--text-muted);margin-top:1px;">Workshop · 8 hours · 18 nominees</div></div></div>
+            <div class="action-item"><span class="action-dot green"></span><div><div style="font-weight:600;font-size:13px;">Customer Communication Skills</div><div style="font-size:11.5px;color:var(--text-muted);margin-top:1px;">Online · 3 hours · Sales &amp; Support teams</div></div></div>
+            <div class="action-item"><span class="action-dot amber"></span><div><div style="font-weight:600;font-size:13px;">Data-Driven Decision Making</div><div style="font-size:11.5px;color:var(--text-muted);margin-top:1px;">Online · 5 hours · Managers &amp; Leads</div></div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="margin-bottom:12px;">Individual Training Recommendations</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--surface-alt);border-radius:var(--radius-sm);">
+              <div class="emp-avatar av-purple">AM</div>
+              <div><div class="emp-name">Arjun Mehta</div><div style="font-size:12px;color:var(--text-muted);">Leadership Readiness Program</div></div>
+              <span class="badge badge-info" style="margin-left:auto;">Pending</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--surface-alt);border-radius:var(--radius-sm);">
+              <div class="emp-avatar av-blue">SW</div>
+              <div><div class="emp-name">Sarah Wilson</div><div style="font-size:12px;color:var(--text-muted);">Sales CRM Training</div></div>
+              <span class="badge badge-warning" style="margin-left:auto;">Urgent</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--surface-alt);border-radius:var(--radius-sm);">
+              <div class="emp-avatar av-orange">MB</div>
+              <div><div class="emp-name">Michael Brown</div><div style="font-size:12px;color:var(--text-muted);">Workload Management Coaching</div></div>
+              <span class="badge badge-danger" style="margin-left:auto;">Priority</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--surface-alt);border-radius:var(--radius-sm);">
+              <div class="emp-avatar av-indigo">RS</div>
+              <div><div class="emp-name">Riya Sharma</div><div style="font-size:12px;color:var(--text-muted);">Advanced UX Research Training</div></div>
+              <span class="badge badge-teal" style="margin-left:auto;">Enrolled</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== AI REPORTS ==================== -->
+    <section id="sec-aireports" class="section">
+      <div class="section-header">
+        <h2>AI Report Generator</h2>
+        <p>Generate intelligent workforce reports in seconds.</p>
+      </div>
+      <div class="card" style="max-width:680px;margin-bottom:20px;">
+        <div class="card-title" style="margin-bottom:14px;">Configure Report</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Department</label>
+            <select class="form-select" id="rep-dept">
+              <option>All Departments</option>
+              <option>Engineering</option><option>Sales</option><option>Marketing</option>
+              <option>Operations</option><option>Customer Support</option><option>HR</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Date Range</label>
+            <select class="form-select" id="rep-range">
+              <option>This Week</option>
+              <option>Last Week</option>
+              <option>This Month</option>
+              <option>Last Month</option>
+              <option>Last Quarter</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Report Type</label>
+            <select class="form-select" id="rep-type">
+              <option>Weekly Productivity Report</option>
+              <option>Employee Engagement Report</option>
+              <option>Attrition Risk Report</option>
+              <option>Manager Performance Summary</option>
+              <option>HR Operations Report</option>
+              <option>Training Gap Report</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-top:16px;">
+          <button class="btn btn-primary" onclick="generateReport()">✨ Generate AI Report</button>
+        </div>
+      </div>
+      <div class="report-output" id="reportOutput">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+          <div class="ai-chip">✨ AI GENERATED</div>
+          <span id="rep-meta" style="font-size:12px;color:var(--text-muted);"></span>
+        </div>
+        <div class="report-title" id="rep-title"></div>
+        <div class="report-subtitle" id="rep-subtitle"></div>
+        <div class="report-body">
+          <p>This week, the organization maintained an average productivity score of 84%. Customer Support and Engineering demonstrated the strongest output, while Operations showed clear signs of workload pressure and burnout risk. Engagement remained stable at 78%, though 9 employees require HR attention due to declining engagement scores or unresolved blockers.</p>
+          <div class="report-section-title">Key Highlights</div>
+          <ul class="report-list">
+            <li><span>✅</span> 342 tasks completed across all teams this week</li>
+            <li><span>🚧</span> 17 active blockers — 4 pending for more than 3 days</li>
+            <li><span>❤️</span> 9 employees flagged as needing HR support or check-in</li>
+            <li><span>🎫</span> 23 HR requests pending with 3 marked overdue</li>
+            <li><span>🎓</span> 31 training gaps identified across 5 skill areas</li>
+          </ul>
+          <div class="report-section-title">Recommended Actions for HR</div>
+          <ul class="report-list">
+            <li><span>⚖️</span> Review and rebalance workload in Operations team</li>
+            <li><span>🔧</span> Resolve blockers older than 3 days — assign owners</li>
+            <li><span>🌟</span> Recognize top-performing employees this week</li>
+            <li><span>📅</span> Schedule check-ins with 9 employees needing support</li>
+            <li><span>🤖</span> Launch AI productivity training for all managers</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== LEADERSHIP VIEW ==================== -->
+    <section id="sec-leadership" class="section">
+      <div class="section-header">
+        <h2>Leadership View</h2>
+        <p>Executive-level workforce health and strategic workforce intelligence.</p>
+      </div>
+      <div class="grid-3" style="margin-bottom:16px;">
+        <div class="exec-metric">
+          <div class="exec-value">82%</div>
+          <div class="exec-label">Workforce Health Score</div>
+          <div class="exec-trend trend-up">↑ +4% vs last month</div>
+        </div>
+        <div class="exec-metric">
+          <div class="exec-value" style="color:var(--success);">+6%</div>
+          <div class="exec-label">Productivity Trend</div>
+          <div class="exec-trend trend-up">↑ Improving consistently</div>
+        </div>
+        <div class="exec-metric">
+          <div class="exec-value" style="color:var(--danger);">-2%</div>
+          <div class="exec-label">Engagement Trend</div>
+          <div class="exec-trend trend-down">↓ Slight dip — monitor</div>
+        </div>
+        <div class="exec-metric">
+          <div class="exec-value" style="color:var(--warning);">7%</div>
+          <div class="exec-label">Attrition Risk Rate</div>
+          <div class="exec-trend" style="color:var(--text-muted);">9 employees flagged</div>
+        </div>
+        <div class="exec-metric">
+          <div class="exec-value" style="color:var(--success);">89%</div>
+          <div class="exec-label">HR Request Resolution</div>
+          <div class="exec-trend trend-up">↑ Above target (85%)</div>
+        </div>
+        <div class="exec-metric">
+          <div class="exec-value" style="color:var(--warning);">64%</div>
+          <div class="exec-label">Training Completion</div>
+          <div class="exec-trend trend-down">↓ Below target (80%)</div>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title" style="margin-bottom:12px;">Executive Insights</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;gap:12px;padding:12px;background:var(--primary-bg);border-radius:var(--radius-sm);border:1px solid #C7D2FE;">
+              <span style="font-size:20px;">📈</span>
+              <div><div style="font-size:13px;font-weight:600;color:var(--text);">Productivity is improving steadily</div><div style="font-size:12px;color:var(--text-secondary);margin-top:2px;">Up 6% — Engineering and Customer Support lead the way.</div></div>
+            </div>
+            <div style="display:flex;gap:12px;padding:12px;background:var(--warning-bg);border-radius:var(--radius-sm);border:1px solid #FDE68A;">
+              <span style="font-size:20px;">⚠️</span>
+              <div><div style="font-size:13px;font-weight:600;color:var(--text);">Operations has the highest workload risk</div><div style="font-size:12px;color:var(--text-secondary);margin-top:2px;">Overload signals and low engagement require manager action.</div></div>
+            </div>
+            <div style="display:flex;gap:12px;padding:12px;background:var(--danger-bg);border-radius:var(--radius-sm);border:1px solid #FECACA;">
+              <span style="font-size:20px;">🎓</span>
+              <div><div style="font-size:13px;font-weight:600;color:var(--text);">Training gaps are a strategic risk</div><div style="font-size:12px;color:var(--text-secondary);margin-top:2px;">AI tools and cybersecurity gaps should be addressed in Q3.</div></div>
+            </div>
+            <div style="display:flex;gap:12px;padding:12px;background:var(--success-bg);border-radius:var(--radius-sm);border:1px solid #A7F3D0;">
+              <span style="font-size:20px;">❤️</span>
+              <div><div style="font-size:13px;font-weight:600;color:var(--text);">Support actions can reduce attrition risk by 18%</div><div style="font-size:12px;color:var(--text-secondary);margin-top:2px;">Proactive HR check-ins and workload balancing are recommended.</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="margin-bottom:14px;">Workforce Health by Department</div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div class="progress-wrap"><div class="progress-header"><span class="progress-label">Customer Support</span><span class="progress-value">91%</span></div><div class="progress-bar"><div class="progress-fill green" style="width:91%"></div></div></div>
+            <div class="progress-wrap"><div class="progress-header"><span class="progress-label">Engineering</span><span class="progress-value">86%</span></div><div class="progress-bar"><div class="progress-fill" style="width:86%"></div></div></div>
+            <div class="progress-wrap"><div class="progress-header"><span class="progress-label">HR</span><span class="progress-value">85%</span></div><div class="progress-bar"><div class="progress-fill teal" style="width:85%"></div></div></div>
+            <div class="progress-wrap"><div class="progress-header"><span class="progress-label">Sales</span><span class="progress-value">76%</span></div><div class="progress-bar"><div class="progress-fill amber" style="width:76%"></div></div></div>
+            <div class="progress-wrap"><div class="progress-header"><span class="progress-label">Marketing</span><span class="progress-value">78%</span></div><div class="progress-bar"><div class="progress-fill" style="width:78%"></div></div></div>
+            <div class="progress-wrap"><div class="progress-header"><span class="progress-label">Operations</span><span class="progress-value">67%</span></div><div class="progress-bar"><div class="progress-fill red" style="width:67%"></div></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SETTINGS ==================== -->
+    <section id="sec-settings" class="section">
+      <div class="section-header">
+        <h2>Settings</h2>
+        <p>Configure your organization preferences, notifications, and AI settings.</p>
+      </div>
+      <div style="max-width:680px;">
+        <div class="card" style="margin-bottom:16px;">
+          <div class="settings-section">
+            <div class="settings-section-title">Organization</div>
+            <div class="form-grid">
+              <div class="form-group"><label class="form-label">Company Name</label><input class="form-input" value="Pinnacle Route Technologies" /></div>
+              <div class="form-group"><label class="form-label">Industry</label><input class="form-input" value="Technology / SaaS" /></div>
+              <div class="form-group full"><label class="form-label">Departments</label><input class="form-input" value="Engineering, Sales, Marketing, Operations, Customer Support, HR, Design" /></div>
+              <div class="form-group"><label class="form-label">Survey Frequency</label><select class="form-select"><option>Weekly</option><option>Bi-weekly</option><option>Monthly</option></select></div>
+              <div class="form-group"><label class="form-label">Fiscal Year Start</label><select class="form-select"><option>April</option><option>January</option><option>July</option></select></div>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="margin-bottom:16px;">
+          <div class="settings-section-title">Notifications</div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Daily Update Reminders</div><div class="toggle-sub">Remind employees to submit daily updates</div></div>
+            <div class="toggle-switch on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Attrition Risk Alerts</div><div class="toggle-sub">Notify HR when risk signals are detected</div></div>
+            <div class="toggle-switch on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Blocker Escalation Alerts</div><div class="toggle-sub">Alert managers for blockers older than 3 days</div></div>
+            <div class="toggle-switch on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Weekly AI Digest</div><div class="toggle-sub">Send automated weekly workforce summary to HR</div></div>
+            <div class="toggle-switch" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">SLA Breach Notifications</div><div class="toggle-sub">Alert HR team when ticket SLAs are breached</div></div>
+            <div class="toggle-switch on" onclick="this.classList.toggle('on')"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="settings-section-title">AI &amp; Intelligence Settings</div>
+          <div class="form-grid">
+            <div class="form-group"><label class="form-label">Productivity Scoring</label><select class="form-select"><option>Balanced (Task + Engagement)</option><option>Task Completion Only</option><option>Engagement Focused</option></select></div>
+            <div class="form-group"><label class="form-label">Risk Sensitivity</label><select class="form-select"><option>Moderate</option><option>High</option><option>Low</option></select></div>
+          </div>
+          <div class="toggle-row" style="margin-top:12px;">
+            <div><div class="toggle-label">AI-Generated Insights</div><div class="toggle-sub">Show AI commentary on dashboards and reports</div></div>
+            <div class="toggle-switch on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Automated Report Generation</div><div class="toggle-sub">Generate weekly AI reports automatically</div></div>
+            <div class="toggle-switch on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div style="margin-top:16px;">
+            <button class="btn btn-primary">Save Settings</button>
+            <button class="btn btn-ghost" style="margin-left:8px;">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main><!-- /content -->
+</div><!-- /main-wrapper -->
+
+<!-- ===== EMPLOYEE PROFILE MODAL ===== -->
+<div class="modal-overlay" id="empModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="emp-avatar" id="modal-avatar" style="width:42px;height:42px;font-size:15px;"></div>
+        <div>
+          <div class="modal-title" id="modal-name"></div>
+          <div style="font-size:12.5px;color:var(--text-secondary);" id="modal-role-dept"></div>
+        </div>
+      </div>
+      <div class="modal-close" onclick="closeModal()">✕</div>
+    </div>
+    <div class="modal-body">
+      <div class="grid-2" style="margin-bottom:14px;gap:10px;">
+        <div style="background:var(--surface-alt);border-radius:var(--radius-sm);padding:10px 12px;">
+          <div style="font-size:11px;color:var(--text-muted);font-weight:600;text-transform:uppercase;">Manager</div>
+          <div style="font-size:13px;font-weight:600;margin-top:2px;" id="modal-manager"></div>
+        </div>
+        <div style="background:var(--surface-alt);border-radius:var(--radius-sm);padding:10px 12px;">
+          <div style="font-size:11px;color:var(--text-muted);font-weight:600;text-transform:uppercase;">Joined</div>
+          <div style="font-size:13px;font-weight:600;margin-top:2px;" id="modal-joined"></div>
+        </div>
+      </div>
+      <div class="grid-2" style="margin-bottom:14px;gap:10px;">
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px;">Productivity</div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="progress-bar" style="flex:1;"><div class="progress-fill" id="modal-prod-bar"></div></div>
+            <span style="font-size:13px;font-weight:700;" id="modal-prod-val"></span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px;">Engagement</div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="progress-bar" style="flex:1;"><div class="progress-fill teal" id="modal-eng-bar"></div></div>
+            <span style="font-size:13px;font-weight:700;" id="modal-eng-val"></span>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+        <span id="modal-workload-badge"></span>
+        <span id="modal-risk-badge"></span>
+      </div>
+      <div class="divider"></div>
+      <div style="font-size:12px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Recent Daily Updates</div>
+      <div id="modal-updates" style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px;font-size:13px;color:var(--text);"></div>
+      <div class="ai-card" style="margin-bottom:14px;">
+        <div class="ai-card-header"><div class="ai-chip">✨ AI SUMMARY</div></div>
+        <p id="modal-ai-summary"></p>
+      </div>
+      <div style="font-size:12px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Recommended HR Actions</div>
+      <div id="modal-actions" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div id="toast">✅ <span id="toast-msg"></span></div>
+
+<script>
+// ===== MOCK DATA =====
+const employees = [
+  { id:1, name:'Riya Sharma', role:'Product Designer', dept:'Design', manager:'Priya Nair', prod:86, eng:82, workload:'Balanced', risk:'Low Risk', av:'RS', color:'av-indigo', joined:'12 Mar 2023',
+    updates:['Completed new onboarding flow mockups.','Worked on component library updates.','Reviewed design feedback from product team.'],
+    aiSummary:'Riya is performing consistently with strong design output and healthy engagement. No immediate concerns — a great candidate for recognition this week.',
+    actions:['🌟 Appreciate Performance','📅 Monthly Check-in','🎓 Advanced UX Training']},
+  { id:2, name:'Arjun Mehta', role:'Backend Developer', dept:'Engineering', manager:'Karan Shah', prod:91, eng:74, workload:'High Workload', risk:'Medium Risk', av:'AM', color:'av-purple', joined:'5 Aug 2022',
+    updates:['Completed API integration for payments module.','Working on auth service refactor.','Blocked on DB migration approval.'],
+    aiSummary:'Arjun has maintained strong delivery output over the last two weeks, but workload indicators show increased pressure. Manager intervention is recommended to prevent burnout.',
+    actions:['📅 Schedule 1:1 Check-in','⚖️ Review Workload Allocation','🌟 Appreciate Recent Performance','🔧 Resolve Auth Blocker']},
+  { id:3, name:'Sarah Wilson', role:'Sales Executive', dept:'Sales', manager:'Emily Clark', prod:78, eng:69, workload:'Balanced', risk:'Medium Risk', av:'SW', color:'av-blue', joined:'19 Jan 2023',
+    updates:['Called 12 leads, 2 demos scheduled.','Working on Q2 pipeline report.','No blockers today.'],
+    aiSummary:'Sarah\'s productivity has dipped slightly over the past two weeks and mood signals suggest some stress. A supportive check-in and target clarity conversation is recommended.',
+    actions:['💬 Manager Follow-up','🎯 Clarify Q2 Targets','🤝 Offer Support','📊 CRM Training']},
+  { id:4, name:'Daniel Kim', role:'Support Lead', dept:'Customer Support', manager:'Laura Evans', prod:94, eng:88, workload:'High Workload', risk:'Low Risk', av:'DK', color:'av-teal', joined:'3 Jun 2021',
+    updates:['Resolved 47 support tickets.','Trained 2 new team members.','Working on knowledge base updates.'],
+    aiSummary:'Daniel is one of the top contributors this week with exceptional productivity and high engagement. However, sustained high workload should be monitored to prevent future burnout.',
+    actions:['🌟 Formal Recognition','⚖️ Monitor Workload','📅 Career Path Discussion']},
+  { id:5, name:'Fatima Khan', role:'HR Executive', dept:'HR', manager:'Aman Singh', prod:83, eng:81, workload:'Balanced', risk:'Low Risk', av:'FK', color:'av-pink', joined:'14 Sep 2022',
+    updates:['Processed 5 HR tickets.','Conducted onboarding for 2 new hires.','Updated HR policy documents.'],
+    aiSummary:'Fatima is well-balanced with good productivity and engagement. She is a reliable contributor to the HR team with no immediate concerns.',
+    actions:['✅ No Action Required','📅 Regular Check-in']},
+  { id:6, name:'Michael Brown', role:'Operations Manager', dept:'Operations', manager:'James Carter', prod:72, eng:61, workload:'Overloaded', risk:'High Risk', av:'MB', color:'av-orange', joined:'8 Apr 2020',
+    updates:['Managed vendor escalation.','Overloaded with cross-team dependencies.','3 blockers unresolved for 5+ days.'],
+    aiSummary:'Michael is showing significant stress signals — engagement dropped sharply and workload is consistently marked as overloaded. Immediate HR check-in and workload balancing is recommended.',
+    actions:['🚨 Urgent HR Check-in','⚖️ Reassign Tasks','💼 Career Path Discussion','🔧 Resolve Blockers']},
+  { id:7, name:'Neha Verma', role:'Marketing Specialist', dept:'Marketing', manager:'Olivia Smith', prod:80, eng:76, workload:'Balanced', risk:'Low Risk', av:'NV', color:'av-green', joined:'22 Nov 2022',
+    updates:['Published 3 blog articles.','Working on social media calendar.','No blockers.'],
+    aiSummary:'Neha is performing steadily with balanced workload and stable engagement. No concerns at this time.',
+    actions:['✅ All Good','📅 Monthly Check-in']},
+  { id:8, name:'John Miller', role:'QA Engineer', dept:'Engineering', manager:'Karan Shah', prod:84, eng:71, workload:'Heavy', risk:'Medium Risk', av:'JM', color:'av-rose', joined:'17 Mar 2022',
+    updates:['Tested payment module — 3 bugs found.','Working on regression test suite.','Waiting on build deployment.'],
+    aiSummary:'John has a heavy workload this sprint with consistent output but engagement is slightly below average. A check-in to discuss workload expectations would be beneficial.',
+    actions:['📅 1:1 Check-in','⚖️ Workload Discussion','🔧 Unblock Deployment']},
+  { id:9, name:'Aisha Patel', role:'Recruiter', dept:'HR', manager:'Aman Singh', prod:87, eng:85, workload:'Balanced', risk:'Low Risk', av:'AP', color:'av-amber', joined:'6 Jul 2023',
+    updates:['Screened 18 applicants.','Conducted 4 phone interviews.','2 offers sent.'],
+    aiSummary:'Aisha is among the highest engagement scorers in HR. Productivity and morale are both strong — she\'s a great candidate for recognition.',
+    actions:['🌟 Recognize Performance','📅 Career Growth Chat']},
+  { id:10, name:'Carlos Rivera', role:'Account Manager', dept:'Sales', manager:'Emily Clark', prod:75, eng:66, workload:'Heavy', risk:'Medium Risk', av:'CR', color:'av-cyan', joined:'11 Feb 2023',
+    updates:['Followed up with 8 enterprise accounts.','Preparing Q2 renewal proposals.','Blocked on contract approval.'],
+    aiSummary:'Carlos is managing a heavy account load and engagement is trending downward. A supportive 1:1 and workload review is recommended before the trend worsens.',
+    actions:['💬 1:1 Check-in','⚖️ Account Load Review','🎯 Goal Alignment','🔧 Contract Blocker']}
+];
+
+const mockUpdates = [
+  { name:'Daniel Kim', done:'Resolved 47 support tickets and trained new team members', inprogress:'Updating knowledge base articles', blocker:'None', mood:'Happy', workload:'High Workload', time:'9:42 AM' },
+  { name:'Arjun Mehta', done:'Completed API integration for payments module', inprogress:'Auth service refactor (50% done)', blocker:'DB migration approval pending from DevOps', mood:'Stressed', workload:'Heavy', time:'9:15 AM' },
+  { name:'Riya Sharma', done:'Delivered onboarding flow mockups to product team', inprogress:'Component library documentation', blocker:'None', mood:'Happy', workload:'Balanced', time:'10:05 AM' },
+  { name:'Michael Brown', done:'Vendor escalation call completed', inprogress:'Cross-team dependency coordination', blocker:'3 blockers unresolved — waiting on Engineering and Finance', mood:'Overloaded', workload:'Overloaded', time:'8:55 AM' }
+];
+
+// ===== NAV =====
+const sectionTitles = {
+  dashboard:'Dashboard', employees:'Employees', dailyupdates:'Daily Updates',
+  productivity:'Team Productivity', engagement:'Engagement', attrition:'Workforce Support',
+  hrrequests:'HR Requests', skills:'Skills & Training', aireports:'AI Reports',
+  leadership:'Leadership View', settings:'Settings'
+};
+
+function showSection(id, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if(el) el.classList.add('active');
+  document.getElementById('page-title').textContent = sectionTitles[id] || id;
+  closeSidebar();
+  if(id==='employees') renderEmployees();
+  if(id==='dailyupdates') renderUpdates();
+  if(id==='productivity') renderBarChart();
+}
+
+// ===== SIDEBAR TOGGLE =====
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+}
+
+// ===== EMPLOYEE TABLE =====
+function getRiskBadge(risk) {
+  if(risk==='Low Risk') return '<span class="badge badge-success">✓ Low Risk</span>';
+  if(risk==='Medium Risk') return '<span class="badge badge-warning">⚡ Needs Attention</span>';
+  if(risk==='High Risk') return '<span class="badge badge-danger">⚠ Check-in Suggested</span>';
+  return '<span class="badge badge-neutral">'+risk+'</span>';
+}
+function getWLBadge(wl) {
+  const map = { Balanced:'badge-success', 'High Workload':'badge-warning', Heavy:'badge-warning', Overloaded:'badge-danger' };
+  return `<span class="badge ${map[wl]||'badge-neutral'}">${wl}</span>`;
+}
+const avColors = ['av-indigo','av-purple','av-teal','av-green','av-orange','av-pink','av-blue','av-rose','av-amber','av-cyan'];
+
+function renderEmployees(list) {
+  const data = list || employees;
+  const tbody = document.getElementById('empTbody');
+  tbody.innerHTML = data.map(e => `
+    <tr>
+      <td><div class="employee-cell"><div class="emp-avatar ${e.color}">${e.av}</div><div><div class="emp-name">${e.name}</div><div class="emp-role">${e.role}</div></div></div></td>
+      <td>${e.dept}</td>
+      <td>${e.manager}</td>
+      <td><div style="display:flex;align-items:center;gap:6px;"><div class="progress-bar" style="width:70px;"><div class="progress-fill" style="width:${e.prod}%"></div></div><span style="font-size:12px;font-weight:700;">${e.prod}%</span></div></td>
+      <td><div style="display:flex;align-items:center;gap:6px;"><div class="progress-bar" style="width:70px;"><div class="progress-fill teal" style="width:${e.eng}%"></div></div><span style="font-size:12px;font-weight:700;">${e.eng}%</span></div></td>
+      <td>${getWLBadge(e.workload)}</td>
+      <td>${getRiskBadge(e.risk)}</td>
+      <td style="color:var(--text-muted);font-size:12px;">Today</td>
+      <td><button class="btn btn-outline btn-sm" onclick="openModal(${e.id})">View Profile</button></td>
+    </tr>
+  `).join('');
+}
+
+function filterEmployees() {
+  const search = document.getElementById('empSearch').value.toLowerCase();
+  const dept = document.getElementById('deptFilter').value;
+  const risk = document.getElementById('riskFilter').value;
+  const wl = document.getElementById('wlFilter').value;
+  const filtered = employees.filter(e => {
+    const matchSearch = e.name.toLowerCase().includes(search) || e.role.toLowerCase().includes(search);
+    const matchDept = !dept || e.dept === dept;
+    const matchRisk = !risk || e.risk === risk;
+    const matchWl = !wl || e.workload === wl;
+    return matchSearch && matchDept && matchRisk && matchWl;
+  });
+  renderEmployees(filtered);
+}
+
+// ===== MODAL =====
+function openModal(id) {
+  const e = employees.find(x => x.id === id);
+  if(!e) return;
+  document.getElementById('modal-avatar').className = 'emp-avatar '+e.color;
+  document.getElementById('modal-avatar').style.cssText = 'width:42px;height:42px;font-size:15px;';
+  document.getElementById('modal-avatar').textContent = e.av;
+  document.getElementById('modal-name').textContent = e.name;
+  document.getElementById('modal-role-dept').textContent = e.role+' · '+e.dept;
+  document.getElementById('modal-manager').textContent = e.manager;
+  document.getElementById('modal-joined').textContent = e.joined;
+  document.getElementById('modal-prod-bar').style.width = e.prod+'%';
+  document.getElementById('modal-prod-val').textContent = e.prod+'%';
+  document.getElementById('modal-eng-bar').style.width = e.eng+'%';
+  document.getElementById('modal-eng-val').textContent = e.eng+'%';
+  document.getElementById('modal-workload-badge').outerHTML = `<span id="modal-workload-badge">${getWLBadge(e.workload)}</span>`;
+  document.getElementById('modal-risk-badge').outerHTML = `<span id="modal-risk-badge">${getRiskBadge(e.risk)}</span>`;
+  document.getElementById('modal-updates').innerHTML = e.updates.map(u => `<div style="padding:7px 10px;background:var(--surface-alt);border-radius:6px;border-left:3px solid var(--primary);">${u}</div>`).join('');
+  document.getElementById('modal-ai-summary').textContent = e.aiSummary;
+  document.getElementById('modal-actions').innerHTML = e.actions.map(a => `<span class="badge badge-info">${a}</span>`).join('');
+  document.getElementById('empModal').classList.add('open');
+}
+function closeModal() { document.getElementById('empModal').classList.remove('open'); }
+document.getElementById('empModal').addEventListener('click', function(e) { if(e.target===this) closeModal(); });
+
+// ===== DAILY UPDATES =====
+function renderUpdates() {
+  const feed = document.getElementById('updates-feed');
+  const allUpdates = [...mockUpdates, ...(window._newUpdates||[])].reverse();
+  document.getElementById('update-count').textContent = '('+allUpdates.length+' updates)';
+  feed.innerHTML = allUpdates.map(u => `
+    <div class="update-card">
+      <div class="update-card-header">
+        <div class="update-emp">
+          <div class="emp-avatar av-indigo" style="font-size:11px;">${u.name.split(' ').map(w=>w[0]).join('')}</div>
+          <span style="font-size:13.5px;font-weight:600;">${u.name}</span>
+        </div>
+        <span class="update-meta">${u.time}</span>
+      </div>
+      <div class="update-row"><div class="update-row-label">✅ Completed</div><div class="update-row-val">${u.done}</div></div>
+      <div class="update-row"><div class="update-row-label">🔄 In Progress</div><div class="update-row-val">${u.inprogress}</div></div>
+      ${u.blocker && u.blocker !== 'None' ? `<div class="update-row"><div class="update-row-label">🚧 Blocker</div><div class="update-row-val" style="color:var(--danger);">${u.blocker}</div></div>` : ''}
+      <div class="update-badges">
+        ${getMoodBadge(u.mood)} ${getWLBadge(u.workload)}
+      </div>
+    </div>
+  `).join('');
+}
+
+function getMoodBadge(mood) {
+  const map = { Happy:'badge-success', Neutral:'badge-neutral', Stressed:'badge-warning', Overloaded:'badge-danger' };
+  const icons = { Happy:'😊', Neutral:'😐', Stressed:'😟', Overloaded:'😩' };
+  return `<span class="badge ${map[mood]||'badge-neutral'}">${icons[mood]||''} ${mood}</span>`;
+}
+
+function selectRadio(el, groupId) {
+  document.querySelectorAll('#'+groupId+' .radio-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function submitUpdate() {
+  const name = document.getElementById('upd-name').value.trim();
+  const done = document.getElementById('upd-done').value.trim();
+  const inprog = document.getElementById('upd-inprogress').value.trim();
+  const blocker = document.getElementById('upd-blocker').value.trim();
+  const tomorrow = document.getElementById('upd-tomorrow').value.trim();
+  const mood = document.querySelector('#mood-group .radio-btn.selected input')?.value || 'Neutral';
+  const wl = document.querySelector('#wl-group .radio-btn.selected input')?.value || 'Balanced';
+  if(!name || !done) { showToast('⚠️ Please fill in your name and completed work.'); return; }
+  if(!window._newUpdates) window._newUpdates = [];
+  const now = new Date();
+  window._newUpdates.push({ name, done, inprogress:inprog||'—', blocker:blocker||'None', tomorrow, mood, workload:wl, time: now.getHours()+':'+String(now.getMinutes()).padStart(2,'0') });
+  renderUpdates();
+  document.getElementById('upd-name').value=''; document.getElementById('upd-done').value='';
+  document.getElementById('upd-inprogress').value=''; document.getElementById('upd-blocker').value='';
+  document.getElementById('upd-tomorrow').value='';
+  document.querySelectorAll('.radio-btn').forEach(b=>b.classList.remove('selected'));
+  showToast('Daily update submitted successfully');
+}
+
+function generateWeeklySummary() {
+  const el = document.getElementById('weekly-summary');
+  el.style.display = 'block';
+  el.style.animation = 'fadeIn 0.35s ease';
+  showToast('✨ Weekly AI summary generated');
+}
+
+// ===== BAR CHART =====
+function renderBarChart() {
+  const data = [
+    {day:'Mon', val:78},{day:'Tue', val:81},{day:'Wed', val:85},
+    {day:'Thu', val:82},{day:'Fri', val:88},{day:'Sat', val:84},{day:'Sun', val:79}
+  ];
+  const max = 100;
+  const containerH = 120;
+  const chart = document.getElementById('prodChart');
+  if(!chart) return;
+  chart.innerHTML = data.map(d => `
+    <div class="bar-col">
+      <div class="bar-fill" style="height:${Math.round((d.val/max)*containerH)}px;">
+        <span class="bar-pct">${d.val}%</span>
+      </div>
+      <div class="bar-label">${d.day}</div>
+    </div>
+  `).join('');
+}
+
+// ===== AI REPORT =====
+function generateReport() {
+  const dept = document.getElementById('rep-dept').value;
+  const range = document.getElementById('rep-range').value;
+  const type = document.getElementById('rep-type').value;
+  const out = document.getElementById('reportOutput');
+  document.getElementById('rep-title').textContent = type;
+  document.getElementById('rep-subtitle').textContent = dept + ' · ' + range;
+  document.getElementById('rep-meta').textContent = 'Generated on ' + new Date().toLocaleDateString('en-IN', {day:'numeric',month:'long',year:'numeric'});
+  out.classList.add('show');
+  showToast('✨ AI Report generated successfully');
+  out.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+// ===== TOAST =====
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+// ===== INIT =====
+window.addEventListener('DOMContentLoaded', () => {
+  renderEmployees();
+  renderUpdates();
+});
+</script>
+</body>
+</html>
